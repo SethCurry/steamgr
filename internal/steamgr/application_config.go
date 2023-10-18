@@ -38,6 +38,11 @@ func ApplyApplicationConfig(ctx context.Context, conf *ApplicationConfig) error 
 		return err
 	}
 
+	err = sess.LoginAnonymous()
+	if err != nil {
+		return err
+	}
+
 	err = sess.AppUpdate(conf.ID, conf.Validate)
 	if err != nil {
 		return err
