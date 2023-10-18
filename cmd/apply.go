@@ -10,6 +10,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/SethCurry/steamgr/internal/steamcmd"
 	"github.com/SethCurry/steamgr/internal/steamgr"
 	"github.com/spf13/cobra"
 	"go.uber.org/zap"
@@ -36,6 +37,13 @@ to quickly create a Cobra application.`,
 		if err != nil {
 			logger.Fatal("failed to get systemd flag", zap.Error(err))
 		}
+
+		username, err := cmd.Flags().GetString("username")
+		if err != nil {
+			logger.Fatal("failed to get steam username flag", zap.Error(err))
+		}
+
+		factory := steamcmd.NewSessionFactory(username)
 
 		if _, err = os.Stat(systemdDir); os.IsNotExist(err) {
 			err = os.MkdirAll(systemdDir, 0755)
@@ -80,7 +88,7 @@ to quickly create a Cobra application.`,
 				logger.Fatal("failed to unmarshal config", zap.String("name", v.Name()), zap.Error(err))
 			}
 
-			err = steamgr.ApplyApplicationConfig(context.Background(), &config)
+			err = steamgr.ApplyApplicationConfig(context.Background(), &config, factory)
 			if err != nil {
 				logger.Fatal("failed to apply config", zap.String("name", v.Name()), zap.Error(err))
 			}
@@ -111,4 +119,5 @@ func init() {
 	// is called directly, e.g.:
 	// applyCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 	applyCmd.Flags().StringP("systemd", "s", "./systemd", "The directory to put generated systemd configs in")
+	applyCmd.Flags().StringP("username", "u", "", "The username to use for login")
 }

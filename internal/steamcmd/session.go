@@ -5,23 +5,43 @@ import (
 	"fmt"
 )
 
-func NewSession(ctx context.Context) (*Session, error) {
+func NewSessionFactory(username string) *SessionFactory {
+	if username == "" {
+		username = "anonymous"
+	}
+
+	return &SessionFactory{
+		Username: username,
+	}
+}
+
+type SessionFactory struct {
+	Username string
+}
+
+func (s SessionFactory) New(ctx context.Context) (*Session, error) {
+	return NewSession(ctx, s.Username)
+}
+
+func NewSession(ctx context.Context, username string) (*Session, error) {
 	ioSession, err := NewSessionIO(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create session IO: %w", err)
 	}
 
 	return &Session{
-		IO: ioSession,
+		IO:       ioSession,
+		Username: username,
 	}, nil
 }
 
 type Session struct {
-	IO *SessionIO
+	IO       *SessionIO
+	Username string
 }
 
-func (s *Session) LoginAnonymous() error {
-	_, err := s.IO.Exec("login anonymous")
+func (s *Session) Login() error {
+	_, err := s.IO.Exec("login " + s.Username)
 	if err != nil {
 		return fmt.Errorf("failed to execute login command: %w", err)
 	}

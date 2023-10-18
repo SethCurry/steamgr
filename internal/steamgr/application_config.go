@@ -22,8 +22,8 @@ type ApplicationConfig struct {
 	Mods       []int    `json:"mods"`
 }
 
-func ApplyApplicationConfig(ctx context.Context, conf *ApplicationConfig) error {
-	sess, err := steamcmd.NewSession(ctx)
+func ApplyApplicationConfig(ctx context.Context, conf *ApplicationConfig, factory *steamcmd.SessionFactory) error {
+	sess, err := factory.New(ctx)
 	if err != nil {
 		return fmt.Errorf("failed to create new steamcmd session: %w", err)
 	}
@@ -42,7 +42,7 @@ func ApplyApplicationConfig(ctx context.Context, conf *ApplicationConfig) error 
 	}
 	time.Sleep(time.Second)
 
-	err = sess.LoginAnonymous()
+	err = sess.Login()
 	if err != nil {
 		return err
 	}
