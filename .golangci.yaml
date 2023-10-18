@@ -1,0 +1,36 @@
+run:
+  concurrency: 4
+  timeout: 5m
+  issues-exit-code: 2
+  tests: true
+  modules-download-mode: mod
+
+output:
+  format: colored-line-number
+  print-issued-lines: true
+  print-linter-name: true
+  uniq-by-line: true
+  sort-results: true
+
+linters-settings:
+  cyclop:
+    max-complexity: 10
+    package-average: 0.0
+    skip-tests: false
+
+linters:
+  # Enable all available linters.
+  # Default: false
+  enable-all: true
+
+  disable:
+    - depguard
+    - tagliatelle
+
+  # Run only fast linters from enabled linters set (first run won't be fast)
+  # Default: false
+  fast: false
+
+severity:
+  default-severity: warn
+  case-sensitive: false
