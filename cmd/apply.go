@@ -10,7 +10,6 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/SethCurry/steamgr/internal/steamcmd"
 	"github.com/SethCurry/steamgr/internal/steamgr"
 	"github.com/spf13/cobra"
 	"go.uber.org/zap"
@@ -43,20 +42,6 @@ to quickly create a Cobra application.`,
 			if err != nil {
 				logger.Fatal("failed to make systemd dir", zap.String("path", systemdDir), zap.Error(err))
 			}
-		}
-
-		ctx := context.Background()
-
-		logger.Info("starting session")
-		session, err := steamcmd.NewSession(ctx)
-		if err != nil {
-			panic(err)
-		}
-
-		logger.Info("logging in")
-		err = session.LoginAnonymous()
-		if err != nil {
-			panic(err)
 		}
 
 		configsList, err := os.ReadDir(configsDir)
