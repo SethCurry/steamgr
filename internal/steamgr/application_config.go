@@ -27,6 +27,8 @@ func ApplyApplicationConfig(ctx context.Context, conf *ApplicationConfig) error 
 	if err != nil {
 		return fmt.Errorf("failed to create new steamcmd session: %w", err)
 	}
+	defer sess.Close()
+
 	if _, err := os.Stat(conf.InstallDir); os.IsNotExist(err) {
 		err = os.MkdirAll(conf.InstallDir, 0755)
 		if err != nil {

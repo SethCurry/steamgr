@@ -95,12 +95,6 @@ to quickly create a Cobra application.`,
 				logger.Fatal("failed to write systemd unit file", zap.String("name", v.Name()), zap.Error(err))
 			}
 		}
-
-		logger.Info("closing session")
-		err = session.Close()
-		if err != nil {
-			panic(err)
-		}
 	},
 }
 
