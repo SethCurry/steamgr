@@ -1,0 +1,9 @@
+{
+  "id": "",
+  "name": "project-zomboid",
+  "validate": true,
+  "install_dir": "/home/steam/games/project-zomboid",
+  "binary": "project-zomboid",
+  "args": [],
+  "mods": []
+}

@@ -51,6 +51,16 @@ func (s *Session) AppUpdate(appID int, validate bool) error {
 	return nil
 }
 
+func (s *Session) InstallMod(appID int, modID int) error {
+	cmd := fmt.Sprintf("workshop_download_item %d %d", appID, modID)
+
+	if _, err := s.IO.Exec(cmd); err != nil {
+		return fmt.Errorf("failed to execute install mod command: %w", err)
+	}
+
+	return nil
+}
+
 func (s *Session) Close() error {
 	return s.IO.Close()
 }
