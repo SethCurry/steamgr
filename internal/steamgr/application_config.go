@@ -1,6 +1,7 @@
 package steamgr
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"os/user"
@@ -20,7 +21,11 @@ type ApplicationConfig struct {
 	Mods       []int    `json:"mods"`
 }
 
-func ApplyApplicationConfig(sess *steamcmd.Session, conf *ApplicationConfig) error {
+func ApplyApplicationConfig(ctx context.Context, conf *ApplicationConfig) error {
+	sess, err := steamcmd.NewSession(ctx)
+	if err != nil {
+		return fmt.Errorf("failed to create new steamcmd session: %w", err)
+	}
 	if _, err := os.Stat(conf.InstallDir); os.IsNotExist(err) {
 		err = os.MkdirAll(conf.InstallDir, 0755)
 		if err != nil {
@@ -28,7 +33,7 @@ func ApplyApplicationConfig(sess *steamcmd.Session, conf *ApplicationConfig) err
 		}
 	}
 
-	err := sess.ForceInstallDir(conf.InstallDir)
+	err = sess.ForceInstallDir(conf.InstallDir)
 	if err != nil {
 		return err
 	}

@@ -38,6 +38,13 @@ to quickly create a Cobra application.`,
 			logger.Fatal("failed to get systemd flag", zap.Error(err))
 		}
 
+		if _, err = os.Stat(systemdDir); os.IsNotExist(err) {
+			err = os.MkdirAll(systemdDir, 0755)
+			if err != nil {
+				logger.Fatal("failed to make systemd dir", zap.String("path", systemdDir), zap.Error(err))
+			}
+		}
+
 		ctx := context.Background()
 
 		logger.Info("starting session")
@@ -88,7 +95,7 @@ to quickly create a Cobra application.`,
 				logger.Fatal("failed to unmarshal config", zap.String("name", v.Name()), zap.Error(err))
 			}
 
-			err = steamgr.ApplyApplicationConfig(session, &config)
+			err = steamgr.ApplyApplicationConfig(context.Background(), &config)
 			if err != nil {
 				logger.Fatal("failed to apply config", zap.String("name", v.Name()), zap.Error(err))
 			}
