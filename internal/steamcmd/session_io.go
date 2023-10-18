@@ -78,7 +78,7 @@ func copyChanToWriter(writer io.WriteCloser, ch chan string, doPrintln bool) {
 }
 
 func NewSessionIO(ctx context.Context) (*SessionIO, error) {
-	cmd := exec.CommandContext(ctx, "steamcmd")
+	cmd := exec.CommandContext(ctx, "/usr/games/steamcmd")
 
 	stdinLines := make(chan string)
 	stdoutLines := make(chan string)
