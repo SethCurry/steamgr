@@ -7,6 +7,7 @@ import (
 	"os/user"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/SethCurry/steamgr/internal/steamcmd"
 )
@@ -37,22 +38,26 @@ func ApplyApplicationConfig(ctx context.Context, conf *ApplicationConfig) error 
 	if err != nil {
 		return err
 	}
+	time.Sleep(time.Second)
 
 	err = sess.LoginAnonymous()
 	if err != nil {
 		return err
 	}
+	time.Sleep(time.Second)
 
 	err = sess.AppUpdate(conf.ID, conf.Validate)
 	if err != nil {
 		return err
 	}
+	time.Sleep(time.Second)
 
 	for _, modID := range conf.Mods {
 		err = sess.InstallMod(conf.ID, modID)
 		if err != nil {
 			return err
 		}
+		time.Sleep(time.Second)
 	}
 
 	return nil
