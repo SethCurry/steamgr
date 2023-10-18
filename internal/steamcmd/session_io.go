@@ -81,8 +81,8 @@ func NewSessionIO(ctx context.Context) (*SessionIO, error) {
 	cmd := exec.CommandContext(ctx, "/usr/games/steamcmd")
 
 	stdinLines := make(chan string)
-	stdoutLines := make(chan string)
-	stderrLines := make(chan string)
+	stdoutLines := make(chan string, 100)
+	stderrLines := make(chan string, 100)
 
 	stdinSend, err := cmd.StdinPipe()
 	if err != nil {
